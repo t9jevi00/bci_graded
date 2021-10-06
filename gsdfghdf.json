@@ -1,0 +1,803 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "gsdfghdf",
+    "version": "1.0",
+    "contact": {
+      "name": "Ville Jestilä",
+      "email": "t9jevi00@students.oamk.fi",
+      "url": "/frontpage/contactinfo"
+    },
+    "termsOfService": "/frontpage/termsofservice",
+    "description": "API for bci grading webshop",
+    "summary": "bci grading webshop"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Ville Jestilä"
+    }
+  ],
+  "paths": {
+    "/frontpage/users/{userId}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "integer"
+          },
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "Id of an existing user."
+        }
+      ],
+      "get": {
+        "summary": "Get User Info by User ID",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "User Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "Get User Alice Smith": {
+                    "value": {
+                      "id": 142,
+                      "firstName": "Alice",
+                      "lastName": "Smith",
+                      "email": "alice.smith@gmail.com",
+                      "dateOfBirth": "1997-10-31",
+                      "emailVerified": true,
+                      "signUpDate": "2019-08-24"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User Not Found"
+          }
+        },
+        "operationId": "get-users-userId",
+        "description": "Retrieve the information of the user with the matching user ID."
+      },
+      "patch": {
+        "summary": "Update User Information",
+        "operationId": "patch-users-userId",
+        "responses": {
+          "200": {
+            "description": "User Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "Updated User Rebecca Baker": {
+                    "value": {
+                      "id": 13,
+                      "firstName": "Rebecca",
+                      "lastName": "Baker",
+                      "email": "rebecca@gmail.com",
+                      "dateOfBirth": "1985-10-02",
+                      "emailVerified": false,
+                      "createDate": "2019-08-24"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User Not Found"
+          },
+          "409": {
+            "description": "Email Already Taken"
+          }
+        },
+        "description": "Update the information of an existing user.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "If a new email is given, the user's email verified property will be set to false."
+                  },
+                  "dateOfBirth": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "Update First Name": {
+                  "value": {
+                    "firstName": "Rebecca"
+                  }
+                },
+                "Update Email": {
+                  "value": {
+                    "email": "rebecca@gmail.com"
+                  }
+                },
+                "Update Last Name & Date of Birth": {
+                  "value": {
+                    "lastName": "Baker",
+                    "dateOfBirth": "1985-10-02"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Patch user properties to update."
+        }
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "delete-frontpage-users-userId",
+        "responses": {
+          "200": {
+            "description": "User Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "User Not Found"
+          }
+        },
+        "description": "Delete user"
+      }
+    },
+    "/frontpage/user": {
+      "post": {
+        "summary": "Create New User",
+        "operationId": "post-user",
+        "responses": {
+          "200": {
+            "description": "User Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "New User Bob Fellow": {
+                    "value": {
+                      "id": 12,
+                      "firstName": "Bob",
+                      "lastName": "Fellow",
+                      "email": "bob.fellow@gmail.com",
+                      "dateOfBirth": "1996-08-24",
+                      "emailVerified": false,
+                      "createDate": "2020-11-18"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing Required Information"
+          },
+          "409": {
+            "description": "Email Already Taken"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "dateOfBirth": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "firstName",
+                  "lastName",
+                  "email",
+                  "dateOfBirth"
+                ]
+              },
+              "examples": {
+                "Create User Bob Fellow": {
+                  "value": {
+                    "firstName": "Bob",
+                    "lastName": "Fellow",
+                    "email": "bob.fellow@gmail.com",
+                    "dateOfBirth": "1996-08-24"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Post the necessary fields for the API to create a new user."
+        },
+        "description": "Create a new user."
+      },
+      "parameters": []
+    },
+    "/frontpage": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "Show items posted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-frontpage"
+      }
+    },
+    "/frontpage/postitem": {
+      "post": {
+        "summary": "",
+        "operationId": "post-frontpage-postitem",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "type": "string"
+                  },
+                  "Desciption": {
+                    "type": "string"
+                  },
+                  "Category": {
+                    "type": "object",
+                    "properties": {
+                      "Clothing": {
+                        "type": "boolean"
+                      },
+                      "Accesories": {
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "Images": {
+                    "type": "object",
+                    "properties": {
+                      "1": {
+                        "type": "integer"
+                      },
+                      "2": {
+                        "type": "integer"
+                      },
+                      "3": {
+                        "type": "integer"
+                      },
+                      "4": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "Price": {
+                    "type": "number"
+                  },
+                  "DeliveryType": {
+                    "type": "object",
+                    "properties": {
+                      "Shipping": {
+                        "type": "boolean"
+                      },
+                      "Pickup": {
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "SellerInfo": {
+                    "type": "object",
+                    "properties": {
+                      "Name": {
+                        "type": "string"
+                      },
+                      "ContactInfo": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "Title",
+                  "Desciption",
+                  "Category",
+                  "Price",
+                  "DeliveryType",
+                  "SellerInfo"
+                ]
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "Title": "Posted item title",
+                    "Desciption": "posted item description",
+                    "Category": {
+                      "Clothing": true,
+                      "Accesories": true
+                    },
+                    "Images": {
+                      "1": 0,
+                      "2": 0,
+                      "3": 0,
+                      "4": 0
+                    },
+                    "Price": 0,
+                    "DeliveryType": {
+                      "Shipping": true,
+                      "Pickup": true
+                    },
+                    "SellerInfo": {
+                      "Name": "posted item username",
+                      "ContactInfo": "posted item contact info"
+                    }
+                  }
+                }
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          "description": ""
+        }
+      }
+    },
+    "/frontpage/users/{userId}/{userPostedItem}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "userId",
+          "in": "path",
+          "required": true
+        },
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "userPostedItem",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "Item found"
+          },
+          "404": {
+            "description": "Item not Found"
+          }
+        },
+        "operationId": "get-frontpage-users-userId-userPostedItem",
+        "description": "Get users listed items"
+      },
+      "put": {
+        "summary": "",
+        "operationId": "put-frontpage-users-userId-userPostedItem",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Item not Found"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "type": "string"
+                  },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "Category": {
+                    "type": "object",
+                    "properties": {
+                      "Clothing": {
+                        "type": "boolean"
+                      },
+                      "Accesories": {
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "Images": {
+                    "type": "object",
+                    "properties": {
+                      "1": {
+                        "type": "integer"
+                      },
+                      "2": {
+                        "type": "integer"
+                      },
+                      "3": {
+                        "type": "integer"
+                      },
+                      "4": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "Price": {
+                    "type": "number"
+                  },
+                  "DeliveryType": {
+                    "type": "object",
+                    "properties": {
+                      "Shipping": {
+                        "type": "boolean"
+                      },
+                      "Pickup": {
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "SellerInfo": {
+                    "type": "object",
+                    "properties": {
+                      "Name": {
+                        "type": "string"
+                      },
+                      "ContactInfo": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "examples": {
+                "update title": {
+                  "value": {
+                    "Title": "updated title"
+                  }
+                },
+                "update description": {
+                  "value": {
+                    "Description": "string"
+                  }
+                },
+                "update category": {
+                  "value": {
+                    "Category": {
+                      "Clothing": true,
+                      "Accesories": true
+                    }
+                  }
+                },
+                "update images": {
+                  "value": {
+                    "Images": {
+                      "1": 0,
+                      "2": 0,
+                      "3": 0,
+                      "4": 0
+                    }
+                  }
+                },
+                "update price": {
+                  "value": {
+                    "Price": 0
+                  }
+                },
+                "update delivery type": {
+                  "value": {
+                    "DeliveryType": {
+                      "Shipping": true,
+                      "Pickup": true
+                    }
+                  }
+                },
+                "update seller info": {
+                  "value": {
+                    "SellerInfo": {
+                      "Name": "string",
+                      "ContactInfo": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "description": ""
+        },
+        "description": "User can edit their listed items"
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "delete-frontpage-users-userId-userPostedItem",
+        "responses": {
+          "200": {
+            "description": "Item deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Item Not Found"
+          }
+        },
+        "description": "User can delete item they listed"
+      }
+    },
+    "/frontpage/spesificitem": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "Item Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          }
+        },
+        "operationId": "get-frontpage-spesificitem",
+        "description": "Get spesific item from the list of all items"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "title": "User",
+        "type": "object",
+        "description": "",
+        "examples": [
+          {
+            "id": 142,
+            "firstName": "Alice",
+            "lastName": "Smith",
+            "email": "alice.smith@gmail.com",
+            "dateOfBirth": "1997-10-31",
+            "emailVerified": true,
+            "signUpDate": "2019-08-24"
+          }
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the given user."
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date",
+            "example": "1997-10-31"
+          },
+          "emailVerified": {
+            "type": "boolean",
+            "description": "Set to true if the user's email has been verified."
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date",
+            "description": "The date that the user was created."
+          },
+          "UserPostedItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "firstName",
+          "lastName",
+          "email",
+          "emailVerified"
+        ]
+      },
+      "Item": {
+        "title": "Item",
+        "type": "object",
+        "examples": [
+          {
+            "id": "hfhfh747egd",
+            "Title": "Item Title",
+            "Description": "Item description",
+            "Category": {
+              "Clothing": true,
+              "Accesories": true
+            },
+            "Location": {
+              "Country": "Item country",
+              "City": "Item city"
+            },
+            "Images": {
+              "1": 0,
+              "2": 0,
+              "3": 0,
+              "4": 0
+            },
+            "Price": 0,
+            "DateofPosting": "12/03/2021",
+            "DeliveryType": {
+              "Shipping": true,
+              "Pickup": true
+            },
+            "SellerInfo": {
+              "Name": "Sellers name",
+              "ContactInfo": "Seller contact info"
+            }
+          }
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "Title": {
+            "type": "string"
+          },
+          "Description": {
+            "type": "string"
+          },
+          "Category": {
+            "type": "object",
+            "properties": {
+              "Clothing": {
+                "type": "boolean"
+              },
+              "Accesories": {
+                "type": "boolean"
+              }
+            }
+          },
+          "Location": {
+            "type": "object",
+            "properties": {
+              "Country": {
+                "type": "string"
+              },
+              "City": {
+                "type": "string"
+              }
+            }
+          },
+          "Images": {
+            "type": "object",
+            "properties": {
+              "1": {
+                "type": "integer"
+              },
+              "2": {
+                "type": "integer"
+              },
+              "3": {
+                "type": "integer"
+              },
+              "4": {
+                "type": "integer"
+              }
+            }
+          },
+          "Price": {
+            "type": "number"
+          },
+          "DateofPosting": {
+            "type": "string"
+          },
+          "DeliveryType": {
+            "type": "object",
+            "properties": {
+              "Shipping": {
+                "type": "boolean"
+              },
+              "Pickup": {
+                "type": "boolean"
+              }
+            }
+          },
+          "SellerInfo": {
+            "type": "object",
+            "properties": {
+              "Name": {
+                "type": "string"
+              },
+              "ContactInfo": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {}
+  }
+}
